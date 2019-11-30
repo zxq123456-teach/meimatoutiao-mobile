@@ -5,7 +5,8 @@ import {
   Cell,
   CellGroup,
   Field,
-  NavBar
+  NavBar,
+  Toast
 } from 'vant'
 
 Vue
@@ -14,3 +15,4 @@ Vue
   .use(CellGroup)
   .use(Field)
   .use(NavBar)
+  .use(Toast)

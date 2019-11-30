@@ -10,16 +10,12 @@
         label="手机号"
         placeholder="请输入手机号"
         v-model="user.mobile"
-        required
-        clearable
       />
 
       <van-field
         label="验证码"
         placeholder="请输入验证码"
         v-model="user.code"
-        required
-        clearable
       />
     </van-cell-group>
     <!-- /表单 -->
@@ -51,6 +47,11 @@ export default {
   created () {},
   methods: {
     async onLogin () {
+      this.$toast.loading({
+        duration: 0, // 持续时间，0表示持续展示不停止
+        forbidClick: true, // 是否禁止背景点击
+        message: '登录中...' // 提示消息
+      })
       try {
         const res = await request({
           method: 'POST',
@@ -58,8 +59,12 @@ export default {
           data: this.user
         })
         console.log(res, '登陆成功')
+        // 提示 success 的时候，会先把其它的 toast 先清除
+        this.$toast.success('登录成功')
       } catch (err) {
         console.log(err, '登陆失败')
+        // 提示 fail 的时候，会先把其它的 toast 先清除
+        this.$toast.fail('登录失败，手机号或验证码错误')
       }
     }
   }
