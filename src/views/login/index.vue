@@ -41,6 +41,13 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang='less' scoped>
+.login {
+    .login-btn-box {
+        padding: 20px;
+        .van-button {
+            width: 100%;
+        }
+    }
+}
 </style>
