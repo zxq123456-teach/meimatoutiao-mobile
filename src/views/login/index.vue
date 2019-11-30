@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import request from '@/utils/request'
+import { login } from '@/api/user'
 export default {
   name: 'LoginPage',
   components: {},
@@ -53,11 +53,7 @@ export default {
         message: '登录中...' // 提示消息
       })
       try {
-        const res = await request({
-          method: 'POST',
-          url: '/app/v1_0/authorizations',
-          data: this.user
-        })
+        const res = await login(this.user)
         console.log(res, '登陆成功')
         // 提示 success 的时候，会先把其它的 toast 先清除
         this.$toast.success('登录成功')
