@@ -29,39 +29,50 @@
 </template>
 
 <script>
-import { login } from '@/api/user'
+import request from '@/utils/request'
 export default {
   name: 'LoginPage',
   components: {},
-  prop: {},
+  props: {},
   data () {
     return {
       user: {
-        mobile: '',
-        code: ''
+        mobile: '13911111111',
+        code: '246810'
       }
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+  },
   created () {},
   methods: {
     async onLogin () {
+      // const loginToast = this.$toast.loading({
       this.$toast.loading({
         duration: 0, // 持续时间，0表示持续展示不停止
         forbidClick: true, // 是否禁止背景点击
         message: '登录中...' // 提示消息
       })
+
       try {
-        const res = await login(this.user)
-        console.log(res, '登陆成功')
-        // 提示 success 的时候，会先把其它的 toast 先清除
+        const res = await request({
+          method: 'POST',
+          url: '/app/v1_0/authorizations',
+          data: this.user
+        })
+        console.log('登录成功', res)
+        this.$store.commit('setUser', res.data.data)
+        // 提示 success 或者 fail 的时候，会先把其它的 toast 先清除
         this.$toast.success('登录成功')
+        this.$router.push('/')
       } catch (err) {
-        console.log(err, '登陆失败')
-        // 提示 fail 的时候，会先把其它的 toast 先清除
+        console.log('登录失败', err)
         this.$toast.fail('登录失败，手机号或验证码错误')
       }
+
+      // 停止 loading，它会把当前页面中所有的 toast 都给清除
+      // loginToast.clear()
     }
   }
 }
