@@ -8,11 +8,15 @@ Vue.use(VueRouter)
 // 配置路由表
 const routes = [
   {
+    path: '',
+    redirct: '/login'
+  },
+  {
     path: '/login',
     component: Login
   },
   {
-    path: '/',
+    path: '/Tabbar',
     component: Tabbar,
     children: [
       {

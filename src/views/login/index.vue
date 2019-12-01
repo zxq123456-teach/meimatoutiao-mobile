@@ -66,7 +66,7 @@ export default {
         this.$store.commit('setUser', res.data.data)
         // 提示 success 或者 fail 的时候，会先把其它的 toast 先清除
         this.$toast.success('登录成功')
-        this.$router.push('/')
+        this.$router.push('/Tabbar')
       } catch (err) {
         console.log('登录失败', err)
         this.$toast.fail('登录失败，手机号或验证码错误')
