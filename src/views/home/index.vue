@@ -1,6 +1,7 @@
 <template>
   <div class='home'>
     <van-nav-bar title='首页' fixed/>
+
     <!-- 频道列表 -->
     <van-tabs v-model="active">
       <van-tab
@@ -55,6 +56,7 @@
     closeable
     close-icon-position='top-right'
     :style="{ height: '95%' }"
+    @open='onChannelOpen'
     >
       <div class='channel-container'>
         <van-cell title='我的频道' :border='false'>
@@ -62,17 +64,17 @@
         </van-cell>
         <van-grid :gutter='10'>
           <van-grid-item
-          v-for="value in 8"
-          :key="value"
-          text="文字"
+          v-for="channel in channels"
+          :key="channel.id"
+          :text="channel.name"
           />
         </van-grid>
         <van-cell title="推荐频道" :border='false' />
         <van-grid :gutter='10'>
           <van-grid-item
-          v-for="value in 8"
-          :key="value"
-          text="文字"
+          v-for="channel in recommendChannels"
+          :key="channel.id"
+          :text="channel.name"
           />
         </van-grid>
       </div>
@@ -84,6 +86,7 @@
 <script>
 import { getUserChannels } from '@/api/user'
 import { getArticles } from '@/api/article'
+import { getAllChannels } from '@/api/channel'
 export default {
   name: 'HomePage',
   components: {},
@@ -94,10 +97,29 @@ export default {
       loading: false, // 加载更多的转圈圈
       isLoading: false, // 下拉刷新的转圈圈
       channels: [], // 频道列表
-      isChannelShow: true
+      isChannelShow: false, // 弹窗的显示状态
+      allChannels: [] // 所有频道列表
     }
   },
-  computed: {},
+  computed: {
+    recommendChannels () {
+      const arr = []
+      // 遍历所有频道
+      this.allChannels.forEach(channel => {
+        // "我的频道"列表中是否包含当前遍历项
+        // find方法
+        // 找到第一个满足 item.id === channel.id 条件的元素
+        const ret = this.channels.find(item => {
+          return item.id === channel.id
+        })
+        // 如果"我的频道"列表中不包含当前遍历的频道，就把它收集到arr中
+        if (!ret) {
+          arr.push(channel)
+        }
+      })
+      return arr
+    }
+  },
   watch: {
   },
   created () {
@@ -169,6 +191,10 @@ export default {
         channel.timestamp = null // 用于获取频道下一页数据的时间戳
       })
       this.channels = channels
+    },
+    async onChannelOpen () {
+      const res = await getAllChannels()
+      this.allChannels = res.data.data.channels
     }
   }
 }
