@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <van-nav-bar title='首页' />
+  <div class='home'>
+    <van-nav-bar title='首页' fixed/>
 
     <van-tabs v-model="active">
       <van-tab
@@ -134,10 +134,41 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
-.home{
+<style lang="less" scoped>
+.home {
   .article-info span {
     margin-right: 10px;
+  }
+  .van-tabs {
+    // 频道列表
+    /deep/ .van-tabs__wrap {
+      position: fixed;
+      top: 46px;
+      z-index: 2;
+      right: 0;
+      left: 0;
+    }
+    // 频道内容
+    /deep/ .van-tabs__content {
+      margin-top: 90px;
+    }
+  }
+  .wap-nav {
+    position: sticky;
+    right: 0;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    opacity: .8;
+  }
+  .channel-container {
+    padding-top: 30px;
+  }
+
+  /deep/ .van-grid-item__icon-wrapper {
+    position: absolute;
+    top: -12px;
+    right: -7px;
   }
 }
 </style>
