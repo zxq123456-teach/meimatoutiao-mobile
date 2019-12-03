@@ -1,7 +1,7 @@
 <template>
   <div class='home'>
     <van-nav-bar title='首页' fixed/>
-
+    <!-- 频道列表 -->
     <van-tabs v-model="active">
       <van-tab
         :title="channel.name"
@@ -36,19 +36,22 @@
           </van-list>
         </van-pull-refresh>
       </van-tab>
+      <!-- 面包按钮 -->
       <div
       class="wap-nav"
       slot="nav-right"
       @click="isChannelShow = true">
-        <van-icon name="wap-nav" />
+        <van-icon name="wap-nav" size='24'/>
       </div>
+      <!-- /面包按钮 -->
     </van-tabs>
+    <!-- /频道列表 -->
     <van-popup
     v-model="isChannelShow"
     round
     position='bottom'
     closeable
-    close-icon-position='top-left'
+    close-icon-position='top-right'
     :style="{ height: '95%' }">
 
     </van-popup>
