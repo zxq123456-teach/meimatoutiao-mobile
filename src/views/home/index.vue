@@ -35,9 +35,23 @@
             </van-cell>
           </van-list>
         </van-pull-refresh>
-        <!-- /文章列表 -->
       </van-tab>
+      <div
+      class="wap-nav"
+      slot="nav-right"
+      @click="isChannelShow = true">
+        <van-icon name="wap-nav" />
+      </div>
     </van-tabs>
+    <van-popup
+    v-model="isChannelShow"
+    round
+    position='bottom'
+    closeable
+    close-icon-position='top-left'
+    :style="{ height: '95%' }">
+
+    </van-popup>
   </div>
 </template>
 
@@ -53,8 +67,8 @@ export default {
       active: 0, // 控制激活的标签页
       loading: false, // 加载更多的转圈圈
       isLoading: false, // 下拉刷新的转圈圈
-      channels: []// 频道列表
-
+      channels: [], // 频道列表
+      isChannelShow: true
     }
   },
   computed: {},
