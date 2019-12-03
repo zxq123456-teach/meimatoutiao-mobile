@@ -46,15 +46,38 @@
       <!-- /面包按钮 -->
     </van-tabs>
     <!-- /频道列表 -->
+
+    <!-- 频道管理 -->
     <van-popup
     v-model="isChannelShow"
     round
     position='bottom'
     closeable
     close-icon-position='top-right'
-    :style="{ height: '95%' }">
-
+    :style="{ height: '95%' }"
+    >
+      <div class='channel-container'>
+        <van-cell title='我的频道' :border='false'>
+          <van-button type='danger' size='mini'>编辑</van-button>
+        </van-cell>
+        <van-grid :gutter='10'>
+          <van-grid-item
+          v-for="value in 8"
+          :key="value"
+          text="文字"
+          />
+        </van-grid>
+        <van-cell title="推荐频道" :border='false' />
+        <van-grid :gutter='10'>
+          <van-grid-item
+          v-for="value in 8"
+          :key="value"
+          text="文字"
+          />
+        </van-grid>
+      </div>
     </van-popup>
+    <!-- /频道管理 -->
   </div>
 </template>
 
