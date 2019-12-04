@@ -101,6 +101,7 @@
 import { getUserChannels } from '@/api/user'
 import { getArticles } from '@/api/article'
 import { getAllChannels } from '@/api/channel'
+import { getItem, setItem } from '@/utils/storage'
 export default {
   name: 'HomePage',
   components: {},
@@ -136,6 +137,9 @@ export default {
     }
   },
   watch: {
+    channels () {
+      setItem('channels', this.channels)
+    }
   },
   created () {
     this.loadUserChannels()
@@ -198,13 +202,22 @@ export default {
     },
 
     async loadUserChannels () {
-      const res = await getUserChannels()
-      const channels = res.data.data.channels
-      channels.forEach(channel => {
-        channel.articles = [] // 频道的文章列表
-        channel.finished = false // 频道的加载结束状态
-        channel.timestamp = null // 用于获取频道下一页数据的时间戳
-      })
+      let channels = []
+      const localChannels = getItem('channels')
+      // 如果有本地存储的频道列表，则获取使用
+      if (localChannels) {
+        channels = localChannels
+      } else {
+        // 如果没有，则请求获取线上推荐的频道列表
+        const res = await getUserChannels()
+        const onLineChannels = res.data.data.channels
+        onLineChannels.forEach(channel => {
+          channel.articles = [] // 频道的文章列表
+          channel.finished = false // 频道的加载结束状态
+          channel.timestamp = null // 用于获取频道下一页数据的时间戳
+        })
+        channels = onLineChannels
+      }
       this.channels = channels
     },
     async onChannelOpen () {
