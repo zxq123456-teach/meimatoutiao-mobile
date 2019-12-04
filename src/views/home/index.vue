@@ -71,14 +71,14 @@
           v-for="(channel,index) in channels"
           :key="channel.id"
           :text="channel.name"
-          @click="onChannelActiveOrDelete(index)"
+          @click="onChannelActiveOrDelete(channel,index)"
           >
           <van-icon
           class='close-icon'
           slot='icon'
           name='close'
           size='20'
-          v-show='isEditShow'
+          v-show="isEditShow && channel.name !== '推荐'"
           />
           </van-grid-item>
         </van-grid>
@@ -216,8 +216,8 @@ export default {
       this.channels.push(channel)
       // 不需要删除  "我的频道"改变  计算属性 recommendChannels 重新调用求值
     },
-    onChannelActiveOrDelete (index) {
-      if (this.isEditShow) {
+    onChannelActiveOrDelete (channel, index) {
+      if (this.isEditShow && channel.name !== '推荐') {
         // 编辑状态 执行删除操作
         this.channels.splice(index, 1)
       } else {
