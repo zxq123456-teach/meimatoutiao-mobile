@@ -229,6 +229,7 @@ export default {
         })
         channels = onLineChannels
       }
+
       this.channels = channels
     },
     async onChannelOpen () {
