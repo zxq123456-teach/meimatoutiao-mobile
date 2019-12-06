@@ -14,7 +14,7 @@
     <!-- /搜索框 -->
 
     <!-- 联想建议 -->
-    <van-cell-group>
+    <van-cell-group v-show="searchText">
       <van-cell
       icon='search'
       :key='item'
@@ -27,17 +27,29 @@
     <!-- /联想建议 -->
 
     <!-- 搜索历史记录 -->
-    <van-cell-group>
+    <van-cell-group v-show="!searchText">
       <van-cell title="历史记录">
-        <span>全部删除</span>&nbsp;&nbsp;
-        <span>完成</span>
-        <van-icon name="delete" />
+        <div v-show="isDeleteShow">
+          <span @click="searchHistories = []">全部删除</span>&nbsp;&nbsp;
+          <span @click="isDeleteShow = false">完成</span>
+        </div>
+        <van-icon
+        name="delete"
+        v-show="!isDeleteShow"
+        @click="isDeleteShow = true"
+        />
       </van-cell>
-      <van-cell title="单元格">
-        <van-icon name="close" />
-      </van-cell>
-      <van-cell title="单元格">
-        <van-icon name="close" />
+      <van-cell
+      :title="item"
+      :key="item"
+      v-for="(item,index) in searchHistories"
+      @click="onSearch(item)"
+      >
+        <van-icon
+        name='close'
+        v-show="isDeleteShow"
+        @click.stop="searchHistories.splice(index,1)"
+        />
       </van-cell>
     </van-cell-group>
     <!-- /搜索历史记录 -->
@@ -46,6 +58,8 @@
 
 <script>
 import { getSuggestions } from '@/api/search'
+import { setItem, getItem } from '@/utils/storage'
+
 export default {
   name: 'SearchPage',
   components: {},
@@ -53,16 +67,37 @@ export default {
   data () {
     return {
       searchText: '', // 用户输入的搜索文本
-      suggestions: []
+      suggestions: [],
+      searchHistories: getItem('search-histories') || [], // 搜索历史记录
+      isDeleteShow: false // 控制删除历史记录的显示状态
     }
   },
   computed: {},
   watch: {
+    searchHistories () {
+      setItem('search-histories', this.searchHistories)
+    }
   },
   created () {},
   methods: {
     // 搜索处理函数
     onSearch (q) {
+      if (!q.trim()) {
+        return
+      }
+
+      // 在跳转之前将搜索的关键字记录到搜索历史记录中
+      const index = this.searchHistories.indexOf(q)
+      if (index !== -1) {
+        // 不要重复的
+        this.searchHistories.splice(index, 1)
+      }
+      // 最新的在最前面
+      this.searchHistories.unshift(q)
+
+      // 将搜索历史记录放到本次存储，以便持久化
+      setItem('search-histories', this.searchHistories)
+
       this.$router.push(`/search/${q}`)
     },
     async onSearchInput () {

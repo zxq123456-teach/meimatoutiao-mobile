@@ -27,6 +27,7 @@
 
 <script>
 import { getSearch } from '@/api/search'
+
 export default {
   name: 'SearchResult',
   components: {},
