@@ -31,7 +31,8 @@
                 round
                 size="small"
                 type="info"
-                >+ 关注</van-button>
+                @click="onFollow"
+                >{{ article.is_followed ? '+ 关注' : '取消关注' }}</van-button>
             </div>
             <div class="content" v-html="article.content"></div>
             <div class="zan">
@@ -42,7 +43,8 @@
                 type="primary"
                 plain
                 icon="good-job-o"
-                >点赞</van-button>&nbsp;&nbsp;&nbsp;&nbsp;
+                @click="onLike"
+                >{{ article.attitude === -1 ? '点赞' : '取消点赞' }}</van-button>&nbsp;&nbsp;&nbsp;&nbsp;
                 <van-button
                 round
                 size="small"
@@ -67,7 +69,12 @@
 </template>
 
 <script>
-import { getArticle } from '@/api/article'
+import { getArticle,
+  addLike,
+  deleteLike
+} from '@/api/article'
+import { followUser, unFollowUser } from '@/api/user'
+
 export default {
   name: 'ArticleIndex',
   props: {
@@ -95,6 +102,33 @@ export default {
         console.log(err)
       }
       this.loading = false
+    },
+    async onFollow () {
+      const userId = this.article.aut_id
+
+      // 如果已关注，则取消关注
+      if (this.article.is_followed) {
+        await unFollowUser(userId)
+        // this.article.is_followed = false
+      } else {
+        // 如果没有关注，则关注
+        await followUser(userId)
+        // this.article.is_followed = true
+      }
+
+      // 更新视图
+      this.article.is_followed = !this.article.is_followed
+    },
+    async onLike () {
+      // 如果已点赞，则取消点赞
+      if (this.article.attitude === 1) {
+        await deleteLike(this.articleId)
+        this.article.attitude = -1
+      } else {
+        // 如果没有点赞，则点赞
+        await addLike(this.articleId)
+        this.article.attitude = 1
+      }
     }
   }
 }
