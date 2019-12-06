@@ -40,7 +40,8 @@ const routes = [
     // 给路由起个名字，必须唯一
     name: 'article',
     path: '/article/:articleId',
-    component: Article
+    component: Article,
+    props: true
   }
 ]
 
