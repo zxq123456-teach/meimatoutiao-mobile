@@ -17,10 +17,11 @@
     <van-cell-group>
       <van-cell
       icon='search'
-      :title='item'
       :key='item'
       v-for='item in suggestions'
-      />
+      >
+      <div slot="title" v-html="highlight(item)"></div>
+      </van-cell>
     </van-cell-group>
     <!-- /联想建议 -->
 
@@ -68,6 +69,10 @@ export default {
       }
       const res = await getSuggestions(this.searchText)
       this.suggestions = res.data.data.options
+    },
+    highlight (str) {
+      const reg = new RegExp(this.searchText, 'ig')
+      return str.replace(reg, `<span style="color:red">${this.searchText}</span>`)
     }
   }
 }
