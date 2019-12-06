@@ -5,6 +5,7 @@ import Tabbar from '@/views/tabbar'
 import Home from '@/views/home'
 import Search from '@/views/search'
 import SearchResult from '@/views/search-result'
+import Article from '@/views/article'
 Vue.use(VueRouter)
 
 // 配置路由表
@@ -34,6 +35,12 @@ const routes = [
   {
     path: '/search/:q',
     component: SearchResult
+  },
+  {
+    // 给路由起个名字，必须唯一
+    name: 'article',
+    path: '/article/:articleId',
+    component: Article
   }
 ]
 
