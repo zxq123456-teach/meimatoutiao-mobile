@@ -52,7 +52,8 @@
                 type="danger"
                 plain
                 icon="delete"
-                >不喜欢</van-button>
+                @click="onDislike"
+                >{{ article.attitude === 0 ? '取消不喜欢' : '不喜欢' }}</van-button>
             </div>
         </div>
         <!-- /文章详情 -->
@@ -71,7 +72,9 @@
 <script>
 import { getArticle,
   addLike,
-  deleteLike
+  deleteLike,
+  addDislike,
+  deleteDislike
 } from '@/api/article'
 import { followUser, unFollowUser } from '@/api/user'
 
@@ -106,13 +109,13 @@ export default {
     async onFollow () {
       const userId = this.article.aut_id
 
-      // 如果已关注，则取消关注
+      // 如果没有关注，则关注
       if (this.article.is_followed) {
-        await unFollowUser(userId)
+        await followUser(userId)
         // this.article.is_followed = false
       } else {
-        // 如果没有关注，则关注
-        await followUser(userId)
+        // 如果已关注，则取消关注
+        await unFollowUser(userId)
         // this.article.is_followed = true
       }
 
@@ -128,6 +131,17 @@ export default {
         // 如果没有点赞，则点赞
         await addLike(this.articleId)
         this.article.attitude = 1
+      }
+    },
+    async onDislike () {
+      // 如果已喜欢 则取消喜欢
+      if (this.article.attitude === 0) {
+        await deleteDislike(this.articleId)
+        this.article.attitude = -1
+      } else {
+        // 如果没有喜欢 则喜欢
+        await addDislike(this.articleId)
+        this.article.attitude = 0
       }
     }
   }
