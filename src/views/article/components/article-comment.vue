@@ -58,20 +58,29 @@
       </van-cell-group>
       <!-- /发布评论 -->
 
-      <!-- 评论回复 -->
-      <van-popup
+    <!-- 评论回复 -->
+    <van-popup
       v-model="isReplyShow"
       get-container="body"
       round
       position="bottom"
       :style="{ height: '90%' }"
+    >
+      <!-- 回复列表 -->
+      <comment-reply
+        :comment="currentComment"
+        v-if="isReplyShow"
+        @close-reply="isReplyShow = false"
       />
-      <!-- 评论回复 -->
+      <!-- /回复列表 -->
+    </van-popup>
+    <!-- 评论回复 -->
   </div>
 </template>
 
 <script>
 import { getComments, addComment, addCommentLike, deleteCommentLike } from '@/api/comment'
+import CommentReply from './comment-reply'
 
 export default {
   name: 'ArticleComment',
@@ -83,8 +92,12 @@ export default {
       finished: false, // 是否加载结束
       offset: null, // 获取下一页评论数据的页码
       inputComment: '',
-      isReplyShow: false
+      isReplyShow: false,
+      currentComment: {} // 存储当前点击回复的评论对象
     }
+  },
+  components: {
+    CommentReply
   },
   methods: {
     async onLoad () {
@@ -145,6 +158,7 @@ export default {
       this.$toast('操作成功')
     },
     async onReplyShow (comment) {
+      this.currentComment = comment
       // 限时回复的弹层
       this.isReplyShow = true
     }
