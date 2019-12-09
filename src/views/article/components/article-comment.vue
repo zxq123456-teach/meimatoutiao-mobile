@@ -24,7 +24,11 @@
                   <p style="color: #363636;">{{ item.content }}</p>
                   <p>
                       <span style="margin-right: 10px;">{{ item.pubdate | relativeTime }}</span>
-                      <van-button size="mini" type="default">回复</van-button>
+                      <van-button
+                      size="mini"
+                      type="default"
+                      @click="onReplyShow(item)"
+                      >回复</van-button>
                   </p>
               </div>
               <van-icon
@@ -53,6 +57,16 @@
           </van-field>
       </van-cell-group>
       <!-- /发布评论 -->
+
+      <!-- 评论回复 -->
+      <van-popup
+      v-model="isReplyShow"
+      get-container="body"
+      round
+      position="bottom"
+      :style="{ height: '90%' }"
+      />
+      <!-- 评论回复 -->
   </div>
 </template>
 
@@ -68,7 +82,8 @@ export default {
       loading: false, // 上拉加载更多的 loading
       finished: false, // 是否加载结束
       offset: null, // 获取下一页评论数据的页码
-      inputComment: ''
+      inputComment: '',
+      isReplyShow: false
     }
   },
   methods: {
@@ -128,6 +143,10 @@ export default {
       // 更新视图状态
       comment.is_liking = !comment.is_liking
       this.$toast('操作成功')
+    },
+    async onReplyShow (comment) {
+      // 限时回复的弹层
+      this.isReplyShow = true
     }
   }
 }
