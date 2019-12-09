@@ -29,7 +29,9 @@
               </div>
               <van-icon
               slot="right-icon"
-              name="like-o"
+              :name="item.is_liking ? 'like' : 'like-o'"
+              @click="onCommentLike(item)"
+              color="red"
                />
           </van-cell>
       </van-list>
@@ -55,7 +57,7 @@
 </template>
 
 <script>
-import { getComments, addComment } from '@/api/comment'
+import { getComments, addComment, addCommentLike, deleteCommentLike } from '@/api/comment'
 
 export default {
   name: 'ArticleComment',
@@ -113,6 +115,19 @@ export default {
 
       // 清空文本框
       this.inputComment = ''
+    },
+    async onCommentLike (comment) {
+      // 如果已经点赞了则取消点赞
+      if (comment.is_liking) {
+        await deleteCommentLike(comment.com_id)
+      } else {
+        // 如果没有点赞则点赞
+        await addCommentLike(comment.com_id)
+      }
+
+      // 更新视图状态
+      comment.is_liking = !comment.is_liking
+      this.$toast('操作成功')
     }
   }
 }
