@@ -20,7 +20,11 @@ import {
   Popup,
   Icon,
   Search,
-  Loading
+  Loading,
+  Dialog,
+  Divider,
+  ActionSheet,
+  DatetimePicker
 } from 'vant'
 
 Vue
@@ -44,3 +48,7 @@ Vue
   .use(Icon)
   .use(Search)
   .use(Loading)
+  .use(Dialog)
+  .use(Divider)
+  .use(ActionSheet)
+  .use(DatetimePicker)

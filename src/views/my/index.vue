@@ -9,7 +9,7 @@
     <!-- /未登录 -->
 
     <!-- 用户信息 -->
-    <van-cell-group class="user-info">
+    <van-cell-group class="user-info" v-if="$store.state.user">
       <van-cell
         class="base-info"
         is-link :border="false"
@@ -56,6 +56,12 @@
       <van-cell title="小智同学" is-link @click="$router.push('/chat')" />
       <van-cell title="系统设置" is-link to="/settings" />
     </van-cell-group>
+    <van-divider />
+    <van-cell
+      style="text-align: center; color: blue;"
+      title="退出登录"
+      @click="onLogout"
+    />
     <!-- /其它 -->
   </div>
 </template>
@@ -66,6 +72,25 @@ export default {
   data () {
     return {
       user: {} // 用户信息对象
+    }
+  },
+  methods: {
+    onLogout () {
+      // Dialog 组件既可以在模板中使用
+      // 也可以通过 JavaScript 来调用
+      // 模板中使用 van-dialog
+      // JavaScript 调用：this.$dialog
+      this.$dialog.confirm({
+        title: '退户提示',
+        message: '确认退出吗？'
+      }).then(() => {
+        // 确认执行这里
+
+        // 清除容器和本地存储的数据
+        this.$store.commit('setUser', null)
+      }).catch(() => {
+        // 取消执行这里
+      })
     }
   }
 }
