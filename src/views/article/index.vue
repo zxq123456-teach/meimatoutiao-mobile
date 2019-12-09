@@ -66,6 +66,10 @@
             </p>
         </div>
         <!-- /加载失败的消息提示 -->
+
+        <!-- 文章评论 -->
+        <article-comment />
+        <!-- /文章评论 -->
     </div>
 </template>
 
@@ -77,6 +81,7 @@ import { getArticle,
   deleteDislike
 } from '@/api/article'
 import { followUser, unFollowUser } from '@/api/user'
+import ArticleComment from './components/article-comment'
 
 export default {
   name: 'ArticleIndex',
@@ -85,6 +90,9 @@ export default {
 
       required: true
     }
+  },
+  components: {
+    ArticleComment
   },
   data () {
     return {
