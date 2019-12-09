@@ -67,11 +67,19 @@
 </template>
 
 <script>
+import { getSelf } from '@/api/user'
+
 export default {
   name: 'UserIndex',
   data () {
     return {
       user: {} // 用户信息对象
+    }
+  },
+  created () {
+    // 如果用户登录了才发请求展示用户信息
+    if (this.$store.state.user) {
+      this.loadUser()
     }
   },
   methods: {
@@ -91,6 +99,10 @@ export default {
       }).catch(() => {
         // 取消执行这里
       })
+    },
+    async loadUser () {
+      const res = await getSelf()
+      this.user = res.data.data
     }
   }
 }
