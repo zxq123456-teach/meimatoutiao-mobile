@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- 未登录 -->
-    <div class="not-login">
-      <div class="circle" @click="$router.push({ name: 'login' })">
+    <div class="not-login" v-if="!this.$store.state.user">
+      <div class="circle" @click="$router.push( '/login' )">
         <span>登录</span>
       </div>
     </div>
